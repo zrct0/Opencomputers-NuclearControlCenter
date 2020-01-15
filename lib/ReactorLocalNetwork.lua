@@ -34,7 +34,7 @@ ReactorLocalNetwork.commandList =
   end,
   
   ["Ask RLM Alive"] = function(address, msg) 
-    ReactorLocalNetwork.sendRRM(ReactorLocalNetwork,"Respond RLM ALive", rn.name)
+    ReactorLocalNetwork.sendRRC(ReactorLocalNetwork,"Respond RLM ALive", rn.name)
   end,
   
   ["Local CMD"] = function(address, msg) 
