@@ -41,7 +41,7 @@ function IThread:threadMonitor()
     for i=0, self.counts - 1 do
       local t = self.threads[i]	  
 	  if t:status() == "dead" then
-	    utils:error("thread ["..self.threadsInfo[i][3].."] "..t:status())       
+	    utils:error("thread ["..self.threadsInfo[i][3].."] "..t:status())		
 	    self.threads[i] = thread.create(self.threadsInfo[i][1], self.threadsInfo[i][2])
 	    utils:warn("restart thread ["..self.threadsInfo[i][3].."]")  	  
 	  end      
@@ -49,5 +49,6 @@ function IThread:threadMonitor()
     os.sleep(5) 	
   end
 end
+
 
 return IThread

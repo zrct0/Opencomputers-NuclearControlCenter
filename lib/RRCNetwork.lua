@@ -1,7 +1,7 @@
 local RRCNetwork = {}
 
 local serialization = require("serialization")
-local utils = require("RRCUtils")
+local utils = require("IUtils")
 local network = require("INetwork")
 local ithread = require("IThread")
 

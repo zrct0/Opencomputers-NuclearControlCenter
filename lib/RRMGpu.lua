@@ -34,6 +34,7 @@ function RRMGpu:adapte()
   if screensCount < 2 or gpusCount < 2 then
     utils:init("Use 1 Gpus to display")
 	mainGpu = component.gpu	
+	self.mainScreen = component.screen
 	mainGpu.setResolution(100, 37) 
 	w, h = mainGpu.getResolution()
 	CMDsGpu:initialize(mainGpu)	

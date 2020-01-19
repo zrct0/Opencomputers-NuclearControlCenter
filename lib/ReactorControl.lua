@@ -68,6 +68,7 @@ function ReactorControl:remap()
 		if self.remapTryCount >= 3 then
 		  utils:error("[RC]TRY REMAP False, STOP REACTOR")	
           self:stop()
+		  return
 		end
 	  else
 	    if self.remapTryCount > 0 then

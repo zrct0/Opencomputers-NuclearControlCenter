@@ -12,6 +12,7 @@ local w, h = 0, 0
 local RLMsCount = 0
 local RLMsName = {}
 local RLMsName2ID = {}
+local RLMSID2BlockID = {}
 local startX, startY, blockW, blockH = {}, {}, 0, 10
 local blocksColor = {}
 local blocksOutputCache = {nil, nil, nil, nil}
@@ -25,12 +26,36 @@ function RRMMainScreen:onRSICome(name, data)
   local RLMId = RLMsName2ID[name]
   if RLMId == nil then
     RLMsName[RLMsCount] = name
-	RLMsName2ID[name] = RLMsCount
+	RLMsName2ID[name] = RLMsCount	
 	RLMId = RLMsCount
+	RLMSID2BlockID[RLMsCount] = RLMId
 	RLMsCount = RLMsCount + 1    
   end  
   blocksOutputCache[RLMId] = {name, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]} 
   RRMMainScreen.printRSI(RRMMainScreen, RLMId)  
+end
+
+function RRMMainScreen:orderBlockIDTable()
+  for i=0, RLMsCount-1 do
+    local name = RLMsName[i]
+    local orderSpac = self:getNameOrderSpac(name)
+  end
+end
+
+function RRMMainScreen:getNameOrderSpac(name)
+  local numberName = ""
+  for i=1,#name do
+    local chr = string.sub(name,i,i)	
+	local ascii = string.byte(chr)
+	if ascii > 47 and ascii < 58 then
+	  numberName = numberName..chr
+	end
+  end
+  local orderSpac = tonumber(numberName)
+  if orderSpac then
+    return orderSpac
+  end
+  return 0
 end
 
 function RRMMainScreen:onRLMDisconneted(RLMName, timeout)  

@@ -4,6 +4,12 @@ local serialization = require("serialization")
 local utils = require("IUtils")
 local gpu = require("component").gpu
 
+local w, h = 0, 0
+
+function RRCGpu:adapte()
+  w, h = gpu.getResolution()
+  return gpu, w, h
+end
 
 function RRCGpu:DrawBox(_x, _y ,_w, _h, chr, color)
   gpu.setForeground(0xFFFFFF)
