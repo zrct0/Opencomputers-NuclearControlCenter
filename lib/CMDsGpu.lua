@@ -10,6 +10,7 @@ local MAX_CMDs_COUNT = 20
 local w, h = 0
 local MAIN_INFO_HEIGHT = 0
 local CMDs_INFO_HEIGHT = 0
+local CMDPOS_BOTTOM = 0
 local cmd_type_id = {["all"] = -1, ["debug"] = 0, ["init"] = 1, ["info"] = 2, ["warn"] = 3, ["error"] = 4}
 local cmd_type_color = {["debug"] = 0xFFFFFF, ["init"] = 0xFF00FF, ["info"] = 0x0000FF, ["warn"] = 0xFFFF00, ["error"] = 0xFF0000}
 local isInitialize = false
@@ -26,6 +27,7 @@ function CMDsGpu:initialize(_gpu)
   w, h = gpu.getViewport()
   MAIN_INFO_HEIGHT = 9
   CMDs_INFO_HEIGHT = h - MAIN_INFO_HEIGHT - 1
+  CMDPOS_BOTTOM = h - 2
   local totalMemory = computer.freeMemory() 
   local Memory_1T = 19300
   if totalMemory > Memory_1T * 2 then
@@ -39,6 +41,12 @@ function CMDsGpu:initialize(_gpu)
   end
   print("totalMemory:"..totalMemory..", MAX_CMDs_COUNT:"..MAX_CMDs_COUNT)
   isInitialize = true
+end
+
+function CMDsGpu:setPrintPosition(top, bottom)
+  MAIN_INFO_HEIGHT = top
+  CMDPOS_BOTTOM = bottom
+  CMDs_INFO_HEIGHT = bottom - top
 end
 
 function CMDsGpu:setCMDMsgCallback(_CMDMsgCallback)  
@@ -114,7 +122,7 @@ function CMDsGpu:printCMDsCache()
   
   local CMDsTypeCache, CMDsTypeCacheCount = self:getCMDsCache(CMDs_INFO_HEIGHT)
   local lastLine = math.min(CMDs_INFO_HEIGHT, CMDsTypeCacheCount - 1)
-  local line = h - 2
+  local line = CMDPOS_BOTTOM
   for i=0, lastLine do
     gpu.setForeground(self:getCMDColor(CMDsTypeCache[i][1]))
     gpu.setBackground(0x000000)

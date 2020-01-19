@@ -29,7 +29,7 @@ function RRMMainScreen:onRSICome(name, data)
 	RLMId = RLMsCount
 	RLMsCount = RLMsCount + 1    
   end  
-  blocksOutputCache[RLMId] = {name, data[1], data[2], data[3], data[4], data[5], data[6], data[7]} 
+  blocksOutputCache[RLMId] = {name, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]} 
   RRMMainScreen.printRSI(RRMMainScreen, RLMId)  
 end
 
@@ -52,13 +52,13 @@ end
 
 function RRMMainScreen:initialize()
   mainGpu, w, h = RRMGpu:adapte() 
-  RRMGpu:clear()
+  --RRMGpu:clear()
   startX = {0, w/2 + 2, 0, w/2 + 2}  
   startY = {9, 9, 20, 20}  
   blockW = w/2 - 1
   blocksConnectState = {false, false, false, false}
   blocksColor = {color.disconnet, color.disconnet, color.disconnet, color.disconnet}
-  RRMGpu:DrawBox(0, 0 , w+1, h+1, " ", 0x000040) --draw background
+  RRMGpu:DrawBox(0, 0 , w+1, h-6, " ", 0x000040) --draw background
   RRMGpu:DrawBox(0, 0 , w+1, 8, " ", 0x3300C0)   --draw title bander
   for i=1, 4 do
     RRMGpu:DrawBox(startX[i], startY[i] , blockW, blockH, " ", blocksColor[i]) --draw blocks background
@@ -85,18 +85,31 @@ function RRMMainScreen:printBlockCache(id)
     end
   
     local lsx, lsy = sx + 4, sy + 1
+	local col2 = lsx + 25
     mainGpu.setBackground(blocksColor[id+1])
-    RRMGpu:print(lsx, lsy + 1, "Reactor #"..blockOutputCache[1], nil, 35)
-    RRMGpu:print(lsx, lsy + 2, "Action:"..string.upper(blockOutputCache[3]), blockOutputCache[3] == "idle" and 0xFFFFFF or 0xFFFF00, 35)
-    RRMGpu:print(lsx, lsy + 3, "Control Status:"..string.upper(blockOutputCache[4]), blockOutputCache[4] == "auto" and 0xFFFFFF or 0xFF0000, 35)
-    RRMGpu:print(lsx, lsy + 4, "Heat:"..blockOutputCache[5].."/10000".."("..tostring(math.ceil(tonumber(blockOutputCache[5])*100/10000)).."%)", blockOutputCache[5] > 2000 and 0xFFFF00 or 0xFFFFFF, 35)
-    RRMGpu:print(lsx, lsy + 5, "EUOutput:"..blockOutputCache[6], nil, 35)
-    RRMGpu:print(lsx, lsy + 6, "EnergyOutput:"..blockOutputCache[7], nil, 35)
+    RRMGpu:print(lsx, lsy + 1, "Reactor #"..blockOutputCache[1], nil, col2)
+    RRMGpu:print(lsx, lsy + 2, "Action:"..string.upper(blockOutputCache[3]), blockOutputCache[3] == "idle" and 0xFFFFFF or 0xFFFF00, col2)
+    RRMGpu:print(lsx, lsy + 3, "Control Status:"..string.upper(blockOutputCache[4]), blockOutputCache[4] == "auto" and 0xFFFFFF or 0xFF0000, col2)
+    RRMGpu:print(lsx, lsy + 4, "Heat:"..blockOutputCache[5].."/10000".."("..tostring(math.ceil(tonumber(blockOutputCache[5])*100/10000)).."%)", blockOutputCache[5] > 2000 and 0xFFFF00 or 0xFFFFFF, col2)
+    RRMGpu:print(lsx, lsy + 5, "EUOutput:"..blockOutputCache[6], nil, col2)
+    RRMGpu:print(lsx, lsy + 6, "EnergyOutput:"..blockOutputCache[7], nil, col2)
 	if blockOutputCache[8] ~= "nil" then
-      RRMGpu:print(lsx, lsy + 7, "MFE:"..blockOutputCache[8].."/4000000".."("..tostring(math.ceil(tonumber(blockOutputCache[8])*100/4000000)).."%)", nil, 35)
+      RRMGpu:print(lsx, lsy + 7, "MFE:"..blockOutputCache[8].."/4000000".."("..tostring(math.ceil(tonumber(blockOutputCache[8])*100/4000000)).."%)", nil, col2)
     else
-	  RRMGpu:print(lsx, lsy + 7, "MFE : Not Connected", nil, 35)    
-    end	
+	  RRMGpu:print(lsx, lsy + 7, "MFE : Not Connected", nil, col2)    
+    end
+	
+	--Draw items count	
+	if blockOutputCache[9] and blockOutputCache[10] then
+	  local chestItemsCount, itemsAlias = blockOutputCache[9], blockOutputCache[10]
+	  for i=0, 4 do
+	    if i <= #chestItemsCount then
+          RRMGpu:print(col2 + 1, lsy + i + 2, itemsAlias[i]..":"..chestItemsCount[i], nil, 10)
+        else
+          RRMGpu:print(col2 + 1, lsy + i + 2,  " ", nil, 10)  
+	    end
+	  end
+	end
   end
 end
 

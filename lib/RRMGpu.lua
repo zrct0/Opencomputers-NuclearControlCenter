@@ -19,7 +19,7 @@ function RRMGpu:adapte()
   utils:init("Start RRMGpu Adapte")
   local components = component.list()
   local screens, gpus = {}, {}
-  local screensCount, gpusCount = 0, 0
+  local screensCount, gpusCount = 0, 0  
   for address, name in pairs(components) do
     if name == "screen" then	  
 	  utils:init(">Find #",screensCount," Screen:", address)
@@ -32,8 +32,17 @@ function RRMGpu:adapte()
 	end
   end
   if screensCount < 2 or gpusCount < 2 then
-    utils:error("Need 2 Gpus And Conneting 2 Screens")
+    utils:init("Use 1 Gpus to display")
+	mainGpu = component.gpu	
+	mainGpu.setResolution(100, 37) 
+	w, h = mainGpu.getResolution()
+	CMDsGpu:initialize(mainGpu)	
+	CMDsGpu:setPrintPosition(h-7, h)
+	RRMGpu.mainGpu = mainGpu
+	utils:init("RRMGpu adapte finished")
+	return mainGpu, w, h
   else
+    utils:init("Use 2 Gpus to display")
     local g0w, g0h = gpus[0].getResolution()
 	local g1w, g1h = gpus[1].getResolution()
     if (g0w * g0h) > (g1w * g1h) then

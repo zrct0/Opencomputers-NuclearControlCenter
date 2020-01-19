@@ -107,7 +107,7 @@ end
 
 
 function ReactorStatus:getSerializeInfo() 
-  local data = {self.isRunning, self.action, self.controlStatus, self.heat, self.EUOutput, self.EnergyOutput, self.mfeStored }
+  local data = {self.isRunning, self.action, self.controlStatus, self.heat, self.EUOutput, self.EnergyOutput, self.mfeStored, self.chestItemsCount, self.itemsAlias }
   return serialization.serialize(data)
 end
 
